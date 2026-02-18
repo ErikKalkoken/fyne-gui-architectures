@@ -1,0 +1,105 @@
+package view
+
+import (
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
+)
+
+type Presenter interface {
+	HandleAddTask()
+	HandleDeleteTask()
+}
+
+type ToDoList struct {
+	addButton    *widget.Button
+	app          fyne.App
+	deleteButton *widget.Button
+	entry        *widget.Entry
+	selected     string
+	taskList     *widget.List
+	tasks        []string
+	w            fyne.Window
+}
+
+func NewToDoList(a fyne.App) *ToDoList {
+	v := &ToDoList{
+		app:   a,
+		tasks: make([]string, 0),
+	}
+	v.w = v.app.NewWindow("ToDo List")
+	return v
+}
+
+func (v *ToDoList) InitUI(presenter Presenter) {
+	v.addButton = widget.NewButton("Add", presenter.HandleAddTask)
+	v.addButton.Disable()
+
+	v.entry = widget.NewEntry()
+	v.entry.OnChanged = func(s string) {
+		if len(s) > 0 {
+			v.addButton.Enable()
+		} else {
+			v.addButton.Disable()
+		}
+	}
+
+	v.deleteButton = widget.NewButton("Delete", presenter.HandleDeleteTask)
+	v.deleteButton.Disable()
+
+	v.taskList = widget.NewList(
+		func() int {
+			return len(v.tasks)
+		},
+		func() fyne.CanvasObject {
+			return widget.NewLabel("Template")
+		},
+		func(id widget.ListItemID, co fyne.CanvasObject) {
+			x := v.tasks[id]
+			co.(*widget.Label).SetText(x)
+		},
+	)
+	v.taskList.OnSelected = func(id widget.ListItemID) {
+		x := v.tasks[id]
+		v.selected = x
+		v.deleteButton.Enable()
+	}
+	v.taskList.OnUnselected = func(id widget.ListItemID) {
+		v.selected = ""
+		v.deleteButton.Disable()
+	}
+
+	c := container.NewBorder(
+		nil,
+		container.NewVBox(
+			container.NewBorder(nil, nil, nil, v.addButton, v.entry),
+			v.deleteButton,
+		),
+		nil,
+		nil,
+		v.taskList,
+	)
+	v.w.SetContent(c)
+	v.w.Resize(fyne.NewSize(300, 500))
+}
+
+func (v *ToDoList) EntryText() string {
+	return v.entry.Text
+}
+
+func (v *ToDoList) ClearEntry() {
+	v.entry.SetText("")
+}
+
+func (v *ToDoList) SelectedText() string {
+	return v.selected
+}
+
+func (v *ToDoList) UpdateTaskList(tasks []string) {
+	v.tasks = tasks
+	v.taskList.Refresh()
+}
+
+func (v *ToDoList) Run() {
+	v.w.ShowAndRun()
+}
