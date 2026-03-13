@@ -1,22 +1,19 @@
-package viewmodel
+package tasks
 
 import (
 	"log"
-
-	"github.com/ErikKalkoken/fyne-gui-architectures/mvvm/model"
-	"github.com/ErikKalkoken/fyne-gui-architectures/mvvm/view"
 
 	"fyne.io/fyne/v2/data/binding"
 )
 
 type ViewModel struct {
 	entry binding.String
-	model *model.Model
+	model *Model
 	tasks binding.StringList
-	view  *view.View
+	view  *View
 }
 
-func NewViewModel(m *model.Model, v *view.View) *ViewModel {
+func NewViewModel(m *Model, v *View) *ViewModel {
 	c := &ViewModel{
 		entry: binding.NewString(),
 		model: m,

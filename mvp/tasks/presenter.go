@@ -1,18 +1,15 @@
-package presenter
+package tasks
 
 import (
 	"log"
-
-	"github.com/ErikKalkoken/fyne-gui-architectures/mvp/model"
-	"github.com/ErikKalkoken/fyne-gui-architectures/mvp/view"
 )
 
 type Presenter struct {
-	model *model.Model
-	view  *view.View
+	model *Model
+	view  *View
 }
 
-func NewPresenter(m *model.Model, v *view.View) *Presenter {
+func NewPresenter(m *Model, v *View) *Presenter {
 	c := &Presenter{
 		model: m,
 		view:  v,

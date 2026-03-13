@@ -1,18 +1,15 @@
-package controller
+package tasks
 
 import (
 	"log"
-
-	"github.com/ErikKalkoken/fyne-gui-architectures/mvc/model"
-	"github.com/ErikKalkoken/fyne-gui-architectures/mvc/view"
 )
 
 type Controller struct {
-	model *model.Model
-	view  *view.View
+	model *Model
+	view  *View
 }
 
-func NewController(m *model.Model, v *view.View) *Controller {
+func NewController(m *Model, v *View) *Controller {
 	c := &Controller{
 		model: m,
 		view:  v,

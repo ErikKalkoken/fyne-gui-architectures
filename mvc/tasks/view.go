@@ -1,11 +1,9 @@
-package view
+package tasks
 
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-
-	"github.com/ErikKalkoken/fyne-gui-architectures/mvc/model"
 )
 
 type View struct {
@@ -13,7 +11,7 @@ type View struct {
 	app          fyne.App
 	deleteButton *widget.Button
 	entry        *widget.Entry
-	model        *model.Model
+	model        *Model
 	onAddTask    func(string)
 	onDeleteTask func(string)
 	selected     string
@@ -22,7 +20,7 @@ type View struct {
 	w            fyne.Window
 }
 
-func NewView(a fyne.App, model *model.Model) *View {
+func NewView(a fyne.App, model *Model) *View {
 	v := &View{
 		app:   a,
 		tasks: make([]string, 0),

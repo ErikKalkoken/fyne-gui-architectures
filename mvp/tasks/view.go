@@ -1,15 +1,10 @@
-package view
+package tasks
 
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
-
-type Presenter interface {
-	HandleAddTask()
-	HandleDeleteTask()
-}
 
 type View struct {
 	addButton    *widget.Button
@@ -31,7 +26,7 @@ func NewView(a fyne.App) *View {
 	return v
 }
 
-func (v *View) InitUI(presenter Presenter) {
+func (v *View) InitUI(presenter *Presenter) {
 	v.addButton = widget.NewButton("Add", presenter.HandleAddTask)
 	v.addButton.Disable()
 

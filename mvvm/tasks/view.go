@@ -1,4 +1,4 @@
-package view
+package tasks
 
 import (
 	"fyne.io/fyne/v2"
@@ -6,11 +6,6 @@ import (
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/widget"
 )
-
-type ViewModel interface {
-	OnAddTask()
-	OnDeleteTask(int)
-}
 
 type View struct {
 	addButton    *widget.Button
@@ -29,7 +24,7 @@ func NewToDoList(a fyne.App) *View {
 	return v
 }
 
-func (v *View) InitUI(entry binding.String, tasks binding.StringList, vm ViewModel) {
+func (v *View) InitUI(entry binding.String, tasks binding.StringList, vm *ViewModel) {
 	v.addButton = widget.NewButton("Add", func() {
 		go vm.OnAddTask()
 	})
