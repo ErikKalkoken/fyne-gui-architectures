@@ -27,7 +27,9 @@ func NewView(a fyne.App) *View {
 }
 
 func (v *View) InitUI(presenter *Presenter) {
-	v.addButton = widget.NewButton("Add", presenter.HandleAddTask)
+	v.addButton = widget.NewButton("Add", func() {
+		go presenter.OnAddTask(v.entry.Text)
+	})
 	v.addButton.Disable()
 
 	v.entry = widget.NewEntry()
@@ -40,7 +42,9 @@ func (v *View) InitUI(presenter *Presenter) {
 		}
 	}
 
-	v.deleteButton = widget.NewButton("Delete", presenter.HandleDeleteTask)
+	v.deleteButton = widget.NewButton("Delete", func() {
+		go presenter.OnDeleteTask(v.selected)
+	})
 	v.deleteButton.Disable()
 
 	v.taskList = widget.NewList(
@@ -79,16 +83,8 @@ func (v *View) InitUI(presenter *Presenter) {
 	v.w.Resize(fyne.NewSize(300, 500))
 }
 
-func (v *View) EntryText() string {
-	return v.entry.Text
-}
-
 func (v *View) ClearEntry() {
 	v.entry.SetText("")
-}
-
-func (v *View) SelectedText() string {
-	return v.selected
 }
 
 func (v *View) UpdateTaskList(tasks []string) {

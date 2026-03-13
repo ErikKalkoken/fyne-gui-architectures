@@ -2,6 +2,8 @@ package tasks
 
 import (
 	"log"
+
+	"fyne.io/fyne/v2"
 )
 
 type Presenter struct {
@@ -17,18 +19,18 @@ func NewPresenter(m *Model, v *View) *Presenter {
 	return c
 }
 
-func (p *Presenter) HandleAddTask() {
-	task := p.view.EntryText()
+func (p *Presenter) OnAddTask(task string) {
 	err := p.model.AddTask(task)
 	if err != nil {
 		log.Fatal(err)
 	}
-	p.view.ClearEntry()
+	fyne.Do(func() {
+		p.view.ClearEntry()
+	})
 	p.updateTaskList()
 }
 
-func (p *Presenter) HandleDeleteTask() {
-	task := p.view.SelectedText()
+func (p *Presenter) OnDeleteTask(task string) {
 	err := p.model.DeleteTask(task)
 	if err != nil {
 		log.Fatal(err)
@@ -42,7 +44,9 @@ func (p *Presenter) updateTaskList() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	p.view.UpdateTaskList(tasks)
+	fyne.Do(func() {
+		p.view.UpdateTaskList(tasks)
+	})
 }
 
 func (p *Presenter) Run() {
