@@ -12,7 +12,7 @@ type ViewModel interface {
 	OnDeleteTask(int)
 }
 
-type ToDoList struct {
+type View struct {
 	addButton    *widget.Button
 	app          fyne.App
 	deleteButton *widget.Button
@@ -21,21 +21,22 @@ type ToDoList struct {
 	w            fyne.Window
 }
 
-func NewToDoList(a fyne.App) *ToDoList {
-	v := &ToDoList{
+func NewToDoList(a fyne.App) *View {
+	v := &View{
 		app: a,
 	}
 	v.w = v.app.NewWindow("ToDo List")
 	return v
 }
 
-func (v *ToDoList) InitUI(entry binding.String, tasks binding.StringList, vm ViewModel) {
+func (v *View) InitUI(entry binding.String, tasks binding.StringList, vm ViewModel) {
 	v.addButton = widget.NewButton("Add", func() {
 		go vm.OnAddTask()
 	})
 	v.addButton.Disable()
 
 	v.entry = widget.NewEntryWithData(entry)
+	v.entry.PlaceHolder = "Name of new task"
 	v.entry.OnChanged = func(s string) {
 		if len(s) > 0 {
 			v.addButton.Enable()
@@ -86,6 +87,6 @@ func (v *ToDoList) InitUI(entry binding.String, tasks binding.StringList, vm Vie
 	v.w.Resize(fyne.NewSize(300, 500))
 }
 
-func (v *ToDoList) Run() {
+func (v *View) Run() {
 	v.w.ShowAndRun()
 }

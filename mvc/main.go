@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 	a := app.New()
-	v := view.NewToDoList(a, m)
+	v := view.NewView(a, m)
 	err = v.Init()
 	if err != nil {
 		log.Fatal(err)

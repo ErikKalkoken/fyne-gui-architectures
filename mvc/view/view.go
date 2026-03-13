@@ -8,7 +8,7 @@ import (
 	"github.com/ErikKalkoken/fyne-gui-architectures/mvc/model"
 )
 
-type ToDoList struct {
+type View struct {
 	addButton    *widget.Button
 	app          fyne.App
 	deleteButton *widget.Button
@@ -22,8 +22,8 @@ type ToDoList struct {
 	w            fyne.Window
 }
 
-func NewToDoList(a fyne.App, model *model.Model) *ToDoList {
-	v := &ToDoList{
+func NewView(a fyne.App, model *model.Model) *View {
+	v := &View{
 		app:   a,
 		tasks: make([]string, 0),
 		model: model,
@@ -33,13 +33,14 @@ func NewToDoList(a fyne.App, model *model.Model) *ToDoList {
 	return v
 }
 
-func (v *ToDoList) createUI() {
+func (v *View) createUI() {
 	v.addButton = widget.NewButton("Add", func() {
 		v.onAddTask(v.entry.Text)
 	})
 	v.addButton.Disable()
 
 	v.entry = widget.NewEntry()
+	v.entry.PlaceHolder = "Name of new task"
 	v.entry.OnChanged = func(s string) {
 		if len(s) > 0 {
 			v.addButton.Enable()
@@ -92,7 +93,7 @@ func (v *ToDoList) createUI() {
 	v.w.Resize(fyne.NewSize(300, 500))
 }
 
-func (v *ToDoList) Init() error {
+func (v *View) Init() error {
 	err := v.UpdateTaskList()
 	if err != nil {
 		return err
@@ -100,19 +101,19 @@ func (v *ToDoList) Init() error {
 	return nil
 }
 
-func (v *ToDoList) BindAddTask(f func(string)) {
+func (v *View) BindAddTask(f func(string)) {
 	v.onAddTask = f
 }
 
-func (v *ToDoList) BindDeleteTask(f func(string)) {
+func (v *View) BindDeleteTask(f func(string)) {
 	v.onDeleteTask = f
 }
 
-func (v *ToDoList) ClearEntry() {
+func (v *View) ClearEntry() {
 	v.entry.SetText("")
 }
 
-func (v *ToDoList) UpdateTaskList() error {
+func (v *View) UpdateTaskList() error {
 	tasks, err := v.model.ListTasks()
 	if err != nil {
 		return err
@@ -124,6 +125,6 @@ func (v *ToDoList) UpdateTaskList() error {
 	return nil
 }
 
-func (v *ToDoList) Run() {
+func (v *View) Run() {
 	v.w.ShowAndRun()
 }

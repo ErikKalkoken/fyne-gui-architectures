@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 	a := app.New()
-	v := view.NewToDoList(a)
+	v := view.NewView(a)
 	p := presenter.NewPresenter(m, v)
 	p.Run()
 }

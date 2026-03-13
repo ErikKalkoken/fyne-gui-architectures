@@ -11,7 +11,7 @@ type Presenter interface {
 	HandleDeleteTask()
 }
 
-type ToDoList struct {
+type View struct {
 	addButton    *widget.Button
 	app          fyne.App
 	deleteButton *widget.Button
@@ -22,8 +22,8 @@ type ToDoList struct {
 	w            fyne.Window
 }
 
-func NewToDoList(a fyne.App) *ToDoList {
-	v := &ToDoList{
+func NewView(a fyne.App) *View {
+	v := &View{
 		app:   a,
 		tasks: make([]string, 0),
 	}
@@ -31,11 +31,12 @@ func NewToDoList(a fyne.App) *ToDoList {
 	return v
 }
 
-func (v *ToDoList) InitUI(presenter Presenter) {
+func (v *View) InitUI(presenter Presenter) {
 	v.addButton = widget.NewButton("Add", presenter.HandleAddTask)
 	v.addButton.Disable()
 
 	v.entry = widget.NewEntry()
+	v.entry.PlaceHolder = "Name of new task"
 	v.entry.OnChanged = func(s string) {
 		if len(s) > 0 {
 			v.addButton.Enable()
@@ -83,23 +84,23 @@ func (v *ToDoList) InitUI(presenter Presenter) {
 	v.w.Resize(fyne.NewSize(300, 500))
 }
 
-func (v *ToDoList) EntryText() string {
+func (v *View) EntryText() string {
 	return v.entry.Text
 }
 
-func (v *ToDoList) ClearEntry() {
+func (v *View) ClearEntry() {
 	v.entry.SetText("")
 }
 
-func (v *ToDoList) SelectedText() string {
+func (v *View) SelectedText() string {
 	return v.selected
 }
 
-func (v *ToDoList) UpdateTaskList(tasks []string) {
+func (v *View) UpdateTaskList(tasks []string) {
 	v.tasks = tasks
 	v.taskList.Refresh()
 }
 
-func (v *ToDoList) Run() {
+func (v *View) Run() {
 	v.w.ShowAndRun()
 }

@@ -9,10 +9,10 @@ import (
 
 type Presenter struct {
 	model *model.Model
-	view  *view.ToDoList
+	view  *view.View
 }
 
-func NewPresenter(m *model.Model, v *view.ToDoList) *Presenter {
+func NewPresenter(m *model.Model, v *view.View) *Presenter {
 	c := &Presenter{
 		model: m,
 		view:  v,

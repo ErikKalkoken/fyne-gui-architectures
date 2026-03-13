@@ -13,10 +13,10 @@ type ViewModel struct {
 	entry binding.String
 	model *model.Model
 	tasks binding.StringList
-	view  *view.ToDoList
+	view  *view.View
 }
 
-func NewViewModel(m *model.Model, v *view.ToDoList) *ViewModel {
+func NewViewModel(m *model.Model, v *view.View) *ViewModel {
 	c := &ViewModel{
 		entry: binding.NewString(),
 		model: m,

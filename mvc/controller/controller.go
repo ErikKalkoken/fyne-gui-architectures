@@ -9,10 +9,10 @@ import (
 
 type Controller struct {
 	model *model.Model
-	view  *view.ToDoList
+	view  *view.View
 }
 
-func NewController(m *model.Model, v *view.ToDoList) *Controller {
+func NewController(m *model.Model, v *view.View) *Controller {
 	c := &Controller{
 		model: m,
 		view:  v,
