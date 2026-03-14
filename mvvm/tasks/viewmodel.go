@@ -7,28 +7,28 @@ import (
 )
 
 type ViewModel struct {
-	entry binding.String
+	Entry binding.String
+	Tasks binding.StringList
+
 	model *Model
-	tasks binding.StringList
-	view  *View
 }
 
-func NewViewModel(m *Model, v *View) *ViewModel {
-	c := &ViewModel{
-		entry: binding.NewString(),
+func NewViewModel(m *Model) *ViewModel {
+	vm := &ViewModel{
+		Entry: binding.NewString(),
 		model: m,
-		tasks: binding.NewStringList(),
-		view:  v,
+		Tasks: binding.NewStringList(),
 	}
-	return c
+	vm.updateTaskList()
+	return vm
 }
 
 func (vm *ViewModel) OnAddTask() {
-	task, err := vm.entry.Get()
+	task, err := vm.Entry.Get()
 	if err != nil {
 		panic(err)
 	}
-	err = vm.entry.Set("")
+	err = vm.Entry.Set("")
 	if err != nil {
 		panic(err)
 	}
@@ -46,7 +46,7 @@ func (vm *ViewModel) OnDeleteTask(id int) {
 	if id == 0 {
 		return
 	}
-	task, err := vm.tasks.GetValue(id)
+	task, err := vm.Tasks.GetValue(id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,14 +62,8 @@ func (vm *ViewModel) updateTaskList() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = vm.tasks.Set(tasks)
+	err = vm.Tasks.Set(tasks)
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func (vm *ViewModel) Run() {
-	vm.view.InitUI(vm.entry, vm.tasks, vm)
-	vm.updateTaskList()
-	vm.view.Run()
 }

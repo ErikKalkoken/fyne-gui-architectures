@@ -16,21 +16,18 @@ type View struct {
 	w            fyne.Window
 }
 
-func NewToDoList(a fyne.App) *View {
+func NewView(a fyne.App, vm *ViewModel) *View {
 	v := &View{
 		app: a,
+		w:   a.NewWindow("ToDo List"),
 	}
-	v.w = v.app.NewWindow("ToDo List")
-	return v
-}
 
-func (v *View) InitUI(entry binding.String, tasks binding.StringList, vm *ViewModel) {
 	v.addButton = widget.NewButton("Add", func() {
 		go vm.OnAddTask()
 	})
 	v.addButton.Disable()
 
-	v.entry = widget.NewEntryWithData(entry)
+	v.entry = widget.NewEntryWithData(vm.Entry)
 	v.entry.PlaceHolder = "Name of new task"
 	v.entry.OnChanged = func(s string) {
 		if len(s) > 0 {
@@ -47,7 +44,7 @@ func (v *View) InitUI(entry binding.String, tasks binding.StringList, vm *ViewMo
 	v.deleteButton.Disable()
 
 	v.taskList = widget.NewListWithData(
-		tasks,
+		vm.Tasks,
 		func() fyne.CanvasObject {
 			return widget.NewLabel("Template")
 		},
@@ -80,6 +77,7 @@ func (v *View) InitUI(entry binding.String, tasks binding.StringList, vm *ViewMo
 	)
 	v.w.SetContent(c)
 	v.w.Resize(fyne.NewSize(300, 500))
+	return v
 }
 
 func (v *View) Run() {

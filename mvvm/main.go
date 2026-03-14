@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 	a := app.New()
-	v := tasks.NewToDoList(a)
-	p := tasks.NewViewModel(m, v)
-	p.Run()
+	vm := tasks.NewViewModel(m)
+	v := tasks.NewView(a, vm)
+	v.Run()
 }

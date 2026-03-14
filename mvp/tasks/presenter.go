@@ -12,11 +12,11 @@ type Presenter struct {
 }
 
 func NewPresenter(m *Model, v *View) *Presenter {
-	c := &Presenter{
+	p := &Presenter{
 		model: m,
 		view:  v,
 	}
-	return c
+	return p
 }
 
 func (p *Presenter) OnAddTask(task string) {
