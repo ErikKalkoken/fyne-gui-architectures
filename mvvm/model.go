@@ -2,15 +2,18 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 )
 
 type Model struct {
-	db *sql.DB
+	db          *sql.DB
+	isErrorMode bool
 }
 
-func NewModel(db *sql.DB) *Model {
+func NewModel(db *sql.DB, isErrorMode bool) *Model {
 	m := &Model{
-		db: db,
+		db:          db,
+		isErrorMode: isErrorMode,
 	}
 	return m
 }
@@ -25,6 +28,9 @@ func (m *Model) Init() error {
 }
 
 func (m *Model) AddTask(title string) error {
+	if m.isErrorMode {
+		return fmt.Errorf("adding task error")
+	}
 	sqlStmt := "INSERT INTO tasks (title) VALUES (?)"
 	_, err := m.db.Exec(sqlStmt, title)
 	if err != nil {
