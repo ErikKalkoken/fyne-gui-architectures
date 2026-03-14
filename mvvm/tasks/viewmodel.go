@@ -9,6 +9,7 @@ import (
 type ViewModel struct {
 	Entry binding.String
 	Tasks binding.StringList
+	Error binding.Item[error]
 
 	model *Model
 }
@@ -18,6 +19,9 @@ func NewViewModel(m *Model) *ViewModel {
 		Entry: binding.NewString(),
 		model: m,
 		Tasks: binding.NewStringList(),
+		Error: binding.NewItem(func(a, b error) bool {
+			return a == b
+		}),
 	}
 	vm.updateTaskList()
 	return vm
@@ -26,18 +30,21 @@ func NewViewModel(m *Model) *ViewModel {
 func (vm *ViewModel) OnAddTask() {
 	task, err := vm.Entry.Get()
 	if err != nil {
-		panic(err)
+		vm.Error.Set(err)
+		return
 	}
 	err = vm.Entry.Set("")
 	if err != nil {
-		panic(err)
+		vm.Error.Set(err)
+		return
 	}
 	if task == "" {
 		return
 	}
 	err = vm.model.AddTask(task)
 	if err != nil {
-		log.Fatal(err)
+		vm.Error.Set(err)
+		return
 	}
 	vm.updateTaskList()
 }

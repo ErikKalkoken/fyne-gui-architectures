@@ -1,7 +1,7 @@
 package tasks
 
 import (
-	"log"
+	"fyne.io/fyne/v2"
 )
 
 type Controller struct {
@@ -22,13 +22,15 @@ func NewController(m *Model, v *View) *Controller {
 func (c *Controller) addTask(task string) {
 	err := c.model.AddTask(task)
 	if err != nil {
-		log.Fatal(err)
+		c.view.ShowError(err)
 	}
 	c.view.ClearEntry()
 	go func() {
 		err = c.view.UpdateTaskList()
 		if err != nil {
-			log.Fatal(err)
+			fyne.Do(func() {
+				c.view.ShowError(err)
+			})
 		}
 	}()
 }
@@ -36,12 +38,14 @@ func (c *Controller) addTask(task string) {
 func (c *Controller) deleteTask(task string) {
 	err := c.model.DeleteTask(task)
 	if err != nil {
-		log.Fatal(err)
+		c.view.ShowError(err)
 	}
 	go func() {
 		err = c.view.UpdateTaskList()
 		if err != nil {
-			log.Fatal(err)
+			fyne.Do(func() {
+				c.view.ShowError(err)
+			})
 		}
 	}()
 }

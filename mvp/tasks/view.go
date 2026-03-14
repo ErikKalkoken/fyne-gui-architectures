@@ -3,6 +3,7 @@ package tasks
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -81,6 +82,10 @@ func (v *View) InitUI(presenter *Presenter) {
 	)
 	v.w.SetContent(c)
 	v.w.Resize(fyne.NewSize(300, 500))
+}
+
+func (v *View) ShowError(err error) {
+	dialog.ShowError(err, v.w)
 }
 
 func (v *View) ClearEntry() {

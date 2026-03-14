@@ -3,6 +3,7 @@ package tasks
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -121,6 +122,10 @@ func (v *View) UpdateTaskList() error {
 		v.taskList.Refresh()
 	})
 	return nil
+}
+
+func (v *View) ShowError(err error) {
+	dialog.ShowError(err, v.w)
 }
 
 func (v *View) Run() {

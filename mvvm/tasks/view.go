@@ -4,6 +4,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -64,6 +65,16 @@ func NewView(a fyne.App, vm *ViewModel) *View {
 		selectedID = 0
 		v.deleteButton.Disable()
 	}
+
+	vm.Error.AddListener(binding.NewDataListener(func() {
+		err2, err := vm.Error.Get()
+		if err != nil {
+			panic(err)
+		}
+		if err2 != nil {
+			dialog.ShowError(err2, v.w)
+		}
+	}))
 
 	c := container.NewBorder(
 		nil,

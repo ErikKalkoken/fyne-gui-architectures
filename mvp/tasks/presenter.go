@@ -1,8 +1,6 @@
 package tasks
 
 import (
-	"log"
-
 	"fyne.io/fyne/v2"
 )
 
@@ -22,7 +20,9 @@ func NewPresenter(m *Model, v *View) *Presenter {
 func (p *Presenter) OnAddTask(task string) {
 	err := p.model.AddTask(task)
 	if err != nil {
-		log.Fatal(err)
+		fyne.Do(func() {
+			p.view.ShowError(err)
+		})
 	}
 	fyne.Do(func() {
 		p.view.ClearEntry()
@@ -33,7 +33,9 @@ func (p *Presenter) OnAddTask(task string) {
 func (p *Presenter) OnDeleteTask(task string) {
 	err := p.model.DeleteTask(task)
 	if err != nil {
-		log.Fatal(err)
+		fyne.Do(func() {
+			p.view.ShowError(err)
+		})
 	}
 	p.updateTaskList()
 
@@ -42,7 +44,9 @@ func (p *Presenter) OnDeleteTask(task string) {
 func (p *Presenter) updateTaskList() {
 	tasks, err := p.model.ListTasks()
 	if err != nil {
-		log.Fatal(err)
+		fyne.Do(func() {
+			p.view.ShowError(err)
+		})
 	}
 	fyne.Do(func() {
 		p.view.UpdateTaskList(tasks)
