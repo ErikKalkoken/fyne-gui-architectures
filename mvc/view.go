@@ -1,4 +1,4 @@
-package tasks
+package main
 
 import (
 	"fyne.io/fyne/v2"
@@ -12,24 +12,29 @@ type View struct {
 	app          fyne.App
 	deleteButton *widget.Button
 	entry        *widget.Entry
+	model        *Model
+	onAddTask    func(string)
+	onDeleteTask func(string)
 	selected     string
 	taskList     *widget.List
 	tasks        []string
 	w            fyne.Window
 }
 
-func NewView(a fyne.App) *View {
+func NewView(a fyne.App, model *Model) *View {
 	v := &View{
 		app:   a,
 		tasks: make([]string, 0),
+		model: model,
 	}
 	v.w = v.app.NewWindow("ToDo List")
+	v.createUI()
 	return v
 }
 
-func (v *View) InitUI(presenter *Presenter) {
+func (v *View) createUI() {
 	v.addButton = widget.NewButton("Add", func() {
-		go presenter.OnAddTask(v.entry.Text)
+		v.onAddTask(v.entry.Text)
 	})
 	v.addButton.Disable()
 
@@ -44,7 +49,10 @@ func (v *View) InitUI(presenter *Presenter) {
 	}
 
 	v.deleteButton = widget.NewButton("Delete", func() {
-		go presenter.OnDeleteTask(v.selected)
+		if x := v.selected; x != "" {
+			v.onDeleteTask(x)
+		}
+		v.taskList.UnselectAll()
 	})
 	v.deleteButton.Disable()
 
@@ -84,17 +92,40 @@ func (v *View) InitUI(presenter *Presenter) {
 	v.w.Resize(fyne.NewSize(300, 500))
 }
 
-func (v *View) ShowError(err error) {
-	dialog.ShowError(err, v.w)
+func (v *View) Init() error {
+	err := v.UpdateTaskList()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (v *View) BindAddTask(f func(string)) {
+	v.onAddTask = f
+}
+
+func (v *View) BindDeleteTask(f func(string)) {
+	v.onDeleteTask = f
 }
 
 func (v *View) ClearEntry() {
 	v.entry.SetText("")
 }
 
-func (v *View) UpdateTaskList(tasks []string) {
-	v.tasks = tasks
-	v.taskList.Refresh()
+func (v *View) UpdateTaskList() error {
+	tasks, err := v.model.ListTasks()
+	if err != nil {
+		return err
+	}
+	fyne.Do(func() {
+		v.tasks = tasks
+		v.taskList.Refresh()
+	})
+	return nil
+}
+
+func (v *View) ShowError(err error) {
+	dialog.ShowError(err, v.w)
 }
 
 func (v *View) Run() {

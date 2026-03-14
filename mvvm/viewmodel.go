@@ -1,4 +1,4 @@
-package tasks
+package main
 
 import (
 	"log"
@@ -17,11 +17,12 @@ type ViewModel struct {
 func NewViewModel(m *Model) *ViewModel {
 	vm := &ViewModel{
 		Entry: binding.NewString(),
-		model: m,
-		Tasks: binding.NewStringList(),
 		Error: binding.NewItem(func(a, b error) bool {
 			return a == b
 		}),
+		Tasks: binding.NewStringList(),
+
+		model: m,
 	}
 	vm.updateTaskList()
 	return vm

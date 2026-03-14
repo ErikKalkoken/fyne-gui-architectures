@@ -6,8 +6,6 @@ import (
 
 	"fyne.io/fyne/v2/app"
 	_ "github.com/mattn/go-sqlite3"
-
-	"github.com/ErikKalkoken/fyne-gui-architectures/mvc/tasks"
 )
 
 func main() {
@@ -17,17 +15,17 @@ func main() {
 	}
 	defer db.Close()
 
-	m := tasks.NewModel(db)
+	m := NewModel(db)
 	err = m.Init()
 	if err != nil {
 		log.Fatal(err)
 	}
 	a := app.New()
-	v := tasks.NewView(a, m)
+	v := NewView(a, m)
 	err = v.Init()
 	if err != nil {
 		log.Fatal(err)
 	}
-	c := tasks.NewController(m, v)
+	c := NewController(m, v)
 	c.Run()
 }
