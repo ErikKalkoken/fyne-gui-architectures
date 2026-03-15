@@ -54,7 +54,7 @@ func (p *Presenter) updateTaskList() {
 }
 
 func (p *Presenter) Run() {
-	p.view.InitUI(p)
+	p.view.MakeUI(p)
 	p.updateTaskList()
 	p.view.Run()
 }

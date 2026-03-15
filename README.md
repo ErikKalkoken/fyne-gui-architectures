@@ -1,35 +1,25 @@
 # GUI Architecture Patterns with Fyne
 
-This project demonstrates how to implement common GUI architecture patterns using the [Fyne GUI toolkit](https://fyne.io/) in Go.
+This projects shows how to apply common GUI architecture patterns when implementing a GUI application with the with the [Fyne GUI toolkit](https://fyne.io/).
 
-## Overview
+## Approach
 
-To illustrate the differences between these patterns, I have implemented a simple **To-Do application** three times, following these architectures:
+For this project we have re-implemented the same application for each of the following GUI patterns:
 
+- Model-View (MV)
 - Model-View-Controller (MVC)
 - Model-View-Presenter (MVP)
 - Model-View-ViewModel (MVVM)
 
-Each implementation of the todo app includes the following functionality:
+Our example GUI application is a To-DO app with this functionality:
 
 - Display a list of current tasks.
 - Add new tasks and delete existing ones.
 - Task data is saved and loaded across sessions.
 - An error dialog is shown when an error occurred.
 
+## Code structure
+
 The repository is organized as a **Go workspace**, with each implementation contained in its own module.
 
-### GUI patterns
-
-The following table summarizes the specific responsibilities assigned to each component across the three patterns:
-
-| Pattern | Model (Data & Logic) | Logic Component (C/P/VM) | View (UI & Interaction) |
-| --- | --- | --- | --- |
-| **MVC** | Manages data and business logic; can notify the View of changes. | **Controller:** Handles user input and updates the Model accordingly. | Displays data from the Model; sends user input events to the Controller. |
-| **MVP** | Manages data and business logic; remains independent of the View. | **Presenter:** Acts as a mediator; retrieves data from the Model and manually pushes updates to the View. | **Passive interface:** Forwards user events to the Presenter and is manually updated by it. |
-| **MVVM** | Manages data and business logic; remains independent of the View. | **ViewModel:** Exposes state and commands; maintains synchronization with the View via **Data Binding**. | **Declarative UI:** Binds directly to the ViewModel; reacts automatically to data changes without manual intervention. |
-
-Sources:
-
-- Arjan Codes, "Which Software Architecture Should You Use: MVC, MVP, or MVVM?, https://github.com/ArjanCodes/2022-gui, 2026-02-20
-- Wikipedia
+All files are in the main package. Each file represents a layer of the respective GUI pattern, e.g. model.go container the code for the model.

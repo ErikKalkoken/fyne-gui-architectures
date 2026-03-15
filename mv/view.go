@@ -34,7 +34,7 @@ func NewView(a fyne.App, model *Model) *View {
 
 func (v *View) makeUI() {
 	v.addButton = widget.NewButton("Add", func() {
-		go v.onAddTask(v.entry.Text)
+		go v.addTask(v.entry.Text)
 	})
 	v.addButton.Disable()
 
@@ -50,7 +50,7 @@ func (v *View) makeUI() {
 
 	v.deleteButton = widget.NewButton("Delete", func() {
 		if x := v.selected; x != "" {
-			go v.onDeleteTask(x)
+			go v.deleteTask(x)
 		}
 		v.taskList.UnselectAll()
 	})
@@ -92,20 +92,49 @@ func (v *View) makeUI() {
 	v.w.Resize(fyne.NewSize(300, 500))
 }
 
+func (v *View) addTask(task string) {
+	err := v.model.AddTask(task)
+	if err != nil {
+		fyne.Do(func() {
+			v.ShowError(err)
+		})
+	}
+	fyne.Do(func() {
+		v.ClearEntry()
+	})
+	go func() {
+		err = v.UpdateTaskList()
+		if err != nil {
+			fyne.Do(func() {
+				v.ShowError(err)
+			})
+		}
+	}()
+}
+
+func (v *View) deleteTask(task string) {
+	err := v.model.DeleteTask(task)
+	if err != nil {
+		fyne.Do(func() {
+			v.ShowError(err)
+		})
+	}
+	go func() {
+		err = v.UpdateTaskList()
+		if err != nil {
+			fyne.Do(func() {
+				v.ShowError(err)
+			})
+		}
+	}()
+}
+
 func (v *View) Init() error {
 	err := v.UpdateTaskList()
 	if err != nil {
 		return err
 	}
 	return nil
-}
-
-func (v *View) BindAddTask(f func(string)) {
-	v.onAddTask = f
-}
-
-func (v *View) BindDeleteTask(f func(string)) {
-	v.onDeleteTask = f
 }
 
 func (v *View) ClearEntry() {

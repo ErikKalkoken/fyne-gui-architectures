@@ -27,7 +27,7 @@ func NewView(a fyne.App) *View {
 	return v
 }
 
-func (v *View) InitUI(presenter *Presenter) {
+func (v *View) MakeUI(presenter *Presenter) {
 	v.addButton = widget.NewButton("Add", func() {
 		go presenter.OnAddTask(v.entry.Text)
 	})

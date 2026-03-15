@@ -22,7 +22,11 @@ func NewView(a fyne.App, vm *ViewModel) *View {
 		app: a,
 		w:   a.NewWindow("ToDo List"),
 	}
+	v.makeUI(vm)
+	return v
+}
 
+func (v *View) makeUI(vm *ViewModel) {
 	v.addButton = widget.NewButton("Add", func() {
 		go vm.OnAddTask()
 	})
@@ -50,7 +54,7 @@ func NewView(a fyne.App, vm *ViewModel) *View {
 			return widget.NewLabel("Template")
 		},
 		func(di binding.DataItem, co fyne.CanvasObject) {
-			v, err := di.(binding.String).Get() // FIXME: Workaround for the out of bounds issue
+			v, err := di.(binding.String).Get() // Workaround for the out of bounds issue. See also: https://github.com/fyne-io/fyne/issues/6118
 			if err != nil {
 				panic(err)
 			}
@@ -88,7 +92,6 @@ func NewView(a fyne.App, vm *ViewModel) *View {
 	)
 	v.w.SetContent(c)
 	v.w.Resize(fyne.NewSize(300, 500))
-	return v
 }
 
 func (v *View) Run() {
