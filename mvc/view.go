@@ -34,7 +34,7 @@ func NewView(a fyne.App, model *Model) *View {
 
 func (v *View) createUI() {
 	v.addButton = widget.NewButton("Add", func() {
-		v.onAddTask(v.entry.Text)
+		go v.onAddTask(v.entry.Text)
 	})
 	v.addButton.Disable()
 
@@ -50,7 +50,7 @@ func (v *View) createUI() {
 
 	v.deleteButton = widget.NewButton("Delete", func() {
 		if x := v.selected; x != "" {
-			v.onDeleteTask(x)
+			go v.onDeleteTask(x)
 		}
 		v.taskList.UnselectAll()
 	})
@@ -64,8 +64,8 @@ func (v *View) createUI() {
 			return widget.NewLabel("Template")
 		},
 		func(id widget.ListItemID, co fyne.CanvasObject) {
-			x := v.tasks[id]
-			co.(*widget.Label).SetText(x)
+			s := v.tasks[id]
+			co.(*widget.Label).SetText(s)
 		},
 	)
 	v.taskList.OnSelected = func(id widget.ListItemID) {
