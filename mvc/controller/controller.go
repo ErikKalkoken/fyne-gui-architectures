@@ -1,15 +1,18 @@
-package main
+package controller
 
 import (
 	"fyne.io/fyne/v2"
+
+	"github.com/ErikKalkoken/fyne-gui-architectures/mvc/model"
+	"github.com/ErikKalkoken/fyne-gui-architectures/mvc/view"
 )
 
 type Controller struct {
-	model *Model
-	view  *View
+	model *model.Model
+	view  *view.View
 }
 
-func NewController(m *Model, v *View) *Controller {
+func New(m *model.Model, v *view.View) *Controller {
 	c := &Controller{
 		model: m,
 		view:  v,

@@ -1,15 +1,23 @@
-package main
+package presenter
 
 import (
 	"fyne.io/fyne/v2"
+
+	"github.com/ErikKalkoken/fyne-gui-architectures/mvp/model"
 )
 
-type Presenter struct {
-	model *Model
-	view  *View
+type View interface {
+	ShowError(err error)
+	ClearEntry()
+	UpdateTaskList([]string)
 }
 
-func NewPresenter(m *Model, v *View) *Presenter {
+type Presenter struct {
+	model *model.Model
+	view  View
+}
+
+func New(m *model.Model, v View) *Presenter {
 	p := &Presenter{
 		model: m,
 		view:  v,
@@ -53,8 +61,6 @@ func (p *Presenter) updateTaskList() {
 	})
 }
 
-func (p *Presenter) Run() {
-	p.view.MakeUI(p)
+func (p *Presenter) Init() {
 	p.updateTaskList()
-	p.view.Run()
 }

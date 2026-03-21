@@ -7,6 +7,9 @@ import (
 
 	"fyne.io/fyne/v2/app"
 	_ "github.com/mattn/go-sqlite3"
+
+	"github.com/ErikKalkoken/fyne-gui-architectures/mv/model"
+	"github.com/ErikKalkoken/fyne-gui-architectures/mv/view"
 )
 
 var errorModeFlag = flag.Bool("error-mode", false, "When activated adding task will generate an error.")
@@ -19,13 +22,13 @@ func main() {
 	}
 	defer db.Close()
 
-	m := NewModel(db, *errorModeFlag)
+	m := model.New(db, *errorModeFlag)
 	err = m.Init()
 	if err != nil {
 		log.Fatal(err)
 	}
 	a := app.New()
-	v := NewView(a, m)
+	v := view.New(a, m)
 	err = v.Init()
 	if err != nil {
 		log.Fatal(err)

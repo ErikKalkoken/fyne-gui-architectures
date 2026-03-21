@@ -1,9 +1,11 @@
-package main
+package viewmodel
 
 import (
 	"log"
 
 	"fyne.io/fyne/v2/data/binding"
+
+	"github.com/ErikKalkoken/fyne-gui-architectures/mvvm/model"
 )
 
 type ViewModel struct {
@@ -11,10 +13,10 @@ type ViewModel struct {
 	Tasks binding.StringList
 	Error binding.Item[error]
 
-	model *Model
+	model *model.Model
 }
 
-func NewViewModel(m *Model) *ViewModel {
+func New(m *model.Model) *ViewModel {
 	vm := &ViewModel{
 		Entry: binding.NewString(),
 		Error: binding.NewItem(func(a, b error) bool {
@@ -24,8 +26,11 @@ func NewViewModel(m *Model) *ViewModel {
 
 		model: m,
 	}
-	vm.updateTaskList()
 	return vm
+}
+
+func (vm *ViewModel) Init() {
+	vm.updateTaskList()
 }
 
 func (vm *ViewModel) OnAddTask() {

@@ -1,17 +1,17 @@
 # GUI Architecture Patterns with Fyne
 
-This projects shows how to apply common GUI architecture patterns when implementing a GUI application with the with the [Fyne GUI toolkit](https://fyne.io/).
+This projects explores how to implement common GUI architecture patterns with the [Fyne GUI toolkit](https://fyne.io/).
 
 ## Approach
 
-For this project we have re-implemented the same application for each of the following GUI patterns:
+We have re-implemented the same GUI application for each of the following GUI patterns:
 
 - Model-View (MV)
 - Model-View-Controller (MVC)
 - Model-View-Presenter (MVP)
 - Model-View-ViewModel (MVVM)
 
-Our example GUI application is a To-DO app with this functionality:
+Our example application is a To-DO app with this functionality:
 
 - Display a list of current tasks.
 - Add new tasks and delete existing ones.
@@ -22,4 +22,4 @@ Our example GUI application is a To-DO app with this functionality:
 
 The repository is organized as a **Go workspace**, with each implementation contained in its own module.
 
-All files are in the main package. Each file represents a layer of the respective GUI pattern, e.g. model.go container the code for the model.
+Each layer (e.g. model) is in a separate GO package. The main function is assembling the layers from the different packages and starting it.

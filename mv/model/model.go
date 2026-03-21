@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"database/sql"
@@ -10,7 +10,7 @@ type Model struct {
 	isErrorMode bool
 }
 
-func NewModel(db *sql.DB, isErrorMode bool) *Model {
+func New(db *sql.DB, isErrorMode bool) *Model {
 	m := &Model{
 		db:          db,
 		isErrorMode: isErrorMode,

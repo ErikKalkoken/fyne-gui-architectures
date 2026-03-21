@@ -1,4 +1,4 @@
-package main
+package view
 
 import (
 	"fyne.io/fyne/v2"
@@ -6,6 +6,8 @@ import (
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
+
+	"github.com/ErikKalkoken/fyne-gui-architectures/mvvm/viewmodel"
 )
 
 type View struct {
@@ -17,7 +19,7 @@ type View struct {
 	w            fyne.Window
 }
 
-func NewView(a fyne.App, vm *ViewModel) *View {
+func New(a fyne.App, vm *viewmodel.ViewModel) *View {
 	v := &View{
 		app: a,
 		w:   a.NewWindow("ToDo List"),
@@ -26,7 +28,7 @@ func NewView(a fyne.App, vm *ViewModel) *View {
 	return v
 }
 
-func (v *View) makeUI(vm *ViewModel) {
+func (v *View) makeUI(vm *viewmodel.ViewModel) {
 	v.addButton = widget.NewButton("Add", func() {
 		go vm.OnAddTask()
 	})
