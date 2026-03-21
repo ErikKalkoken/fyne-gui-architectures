@@ -1,8 +1,6 @@
 package viewmodel
 
 import (
-	"log"
-
 	"fyne.io/fyne/v2/data/binding"
 
 	"github.com/ErikKalkoken/fyne-gui-architectures/mvvm/model"
@@ -29,8 +27,8 @@ func New(m *model.Model) *ViewModel {
 	return vm
 }
 
-func (vm *ViewModel) Init() {
-	vm.updateTaskList()
+func (vm *ViewModel) Init() error {
+	return vm.updateTaskList()
 }
 
 func (vm *ViewModel) OnAddTask() {
@@ -52,7 +50,11 @@ func (vm *ViewModel) OnAddTask() {
 		vm.Error.Set(err)
 		return
 	}
-	vm.updateTaskList()
+	err = vm.updateTaskList()
+	if err != nil {
+		vm.Error.Set(err)
+		return
+	}
 }
 
 func (vm *ViewModel) OnDeleteTask(id int) {
@@ -61,22 +63,29 @@ func (vm *ViewModel) OnDeleteTask(id int) {
 	}
 	task, err := vm.Tasks.GetValue(id)
 	if err != nil {
-		log.Fatal(err)
+		vm.Error.Set(err)
+		return
 	}
 	err = vm.model.DeleteTask(task)
 	if err != nil {
-		log.Fatal(err)
+		vm.Error.Set(err)
+		return
 	}
-	vm.updateTaskList()
+	err = vm.updateTaskList()
+	if err != nil {
+		vm.Error.Set(err)
+		return
+	}
 }
 
-func (vm *ViewModel) updateTaskList() {
+func (vm *ViewModel) updateTaskList() error {
 	tasks, err := vm.model.ListTasks()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	err = vm.Tasks.Set(tasks)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }

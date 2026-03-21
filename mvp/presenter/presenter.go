@@ -1,14 +1,12 @@
 package presenter
 
 import (
-	"fyne.io/fyne/v2"
-
 	"github.com/ErikKalkoken/fyne-gui-architectures/mvp/model"
 )
 
 type View interface {
-	ShowError(err error)
 	ClearEntry()
+	ShowError(err error)
 	UpdateTaskList([]string)
 }
 
@@ -28,22 +26,18 @@ func New(m *model.Model, v View) *Presenter {
 func (p *Presenter) OnAddTask(task string) {
 	err := p.model.AddTask(task)
 	if err != nil {
-		fyne.Do(func() {
-			p.view.ShowError(err)
-		})
+		p.view.ShowError(err)
+		return
 	}
-	fyne.Do(func() {
-		p.view.ClearEntry()
-	})
+	p.view.ClearEntry()
 	p.updateTaskList()
 }
 
 func (p *Presenter) OnDeleteTask(task string) {
 	err := p.model.DeleteTask(task)
 	if err != nil {
-		fyne.Do(func() {
-			p.view.ShowError(err)
-		})
+		p.view.ShowError(err)
+		return
 	}
 	p.updateTaskList()
 
@@ -52,13 +46,10 @@ func (p *Presenter) OnDeleteTask(task string) {
 func (p *Presenter) updateTaskList() {
 	tasks, err := p.model.ListTasks()
 	if err != nil {
-		fyne.Do(func() {
-			p.view.ShowError(err)
-		})
+		p.view.ShowError(err)
+		return
 	}
-	fyne.Do(func() {
-		p.view.UpdateTaskList(tasks)
-	})
+	p.view.UpdateTaskList(tasks)
 }
 
 func (p *Presenter) Init() {

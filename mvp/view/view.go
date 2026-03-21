@@ -85,18 +85,23 @@ func (v *View) MakeUI(presenter *presenter.Presenter) {
 	v.w.SetContent(c)
 	v.w.Resize(fyne.NewSize(300, 500))
 }
-
-func (v *View) ShowError(err error) {
-	dialog.ShowError(err, v.w)
+func (v *View) ClearEntry() {
+	fyne.Do(func() {
+		v.entry.SetText("")
+	})
 }
 
-func (v *View) ClearEntry() {
-	v.entry.SetText("")
+func (v *View) ShowError(err error) {
+	fyne.Do(func() {
+		dialog.ShowError(err, v.w)
+	})
 }
 
 func (v *View) UpdateTaskList(tasks []string) {
-	v.tasks = tasks
-	v.taskList.Refresh()
+	fyne.Do(func() {
+		v.tasks = tasks
+		v.taskList.Refresh()
+	})
 }
 
 func (v *View) Run() {

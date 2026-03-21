@@ -113,7 +113,15 @@ func (v *View) BindDeleteTask(f func(string)) {
 }
 
 func (v *View) ClearEntry() {
-	v.entry.SetText("")
+	fyne.Do(func() {
+		v.entry.SetText("")
+	})
+}
+
+func (v *View) ShowError(err error) {
+	fyne.Do(func() {
+		dialog.ShowError(err, v.w)
+	})
 }
 
 func (v *View) UpdateTaskList() error {
@@ -126,10 +134,6 @@ func (v *View) UpdateTaskList() error {
 		v.taskList.Refresh()
 	})
 	return nil
-}
-
-func (v *View) ShowError(err error) {
-	dialog.ShowError(err, v.w)
 }
 
 func (v *View) Run() {

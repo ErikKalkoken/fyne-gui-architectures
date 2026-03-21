@@ -30,6 +30,9 @@ func main() {
 	a := app.New()
 	vm := viewmodel.New(m)
 	v := view.New(a, vm)
-	vm.Init()
+	err = vm.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
 	v.Run()
 }
